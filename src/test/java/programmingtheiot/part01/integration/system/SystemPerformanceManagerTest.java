@@ -93,6 +93,7 @@ public class SystemPerformanceManagerTest
 			// ignore
 		}
 		
+		this.spMgr.handleTelemetry();
 		this.spMgr.stopManager();
 	}
 	

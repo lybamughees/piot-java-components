@@ -73,7 +73,7 @@ public class SystemPerformanceManager {
 		float cpuUtil = this.sysCpuUtilTask.getTelemetryValue();
 		float memUtil = this.sysMemUtilTask.getTelemetryValue();
 
-		_Logger.fine("CPU utilization: " + cpuUtil + ", Mem utilization: " + memUtil);
+		_Logger.info("CPU utilization: " + cpuUtil + ", Mem utilization: " + memUtil);
 	}
 
 	public void setDataMessageListener(IDataMessageListener listener) {
