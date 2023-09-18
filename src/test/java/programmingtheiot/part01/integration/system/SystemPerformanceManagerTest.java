@@ -79,6 +79,7 @@ public class SystemPerformanceManagerTest
 	
 	/**
 	 * Test method for {@link programmingtheiot.gda.system.SystemPerformanceManager#startManager()}
+	 * {@link programmingtheiot.gda.system.SystemPerformanceManager#handleTelemetry())}
 	 * and {@link programmingtheiot.gda.system.SystemPerformanceManager#stopManager()}
 	 */
 	@Test
