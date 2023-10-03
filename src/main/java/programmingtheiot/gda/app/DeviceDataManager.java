@@ -58,6 +58,8 @@ public class DeviceDataManager implements IDataMessageListener
 	private IRequestResponseClient smtpClient = null;
 	private CoapServerGateway coapServer = null;
 
+	private SystemPerformanceManager sysPerfManager = null;
+
 private boolean enableSystemPerf = false;
 
 private SystemPerformanceManager sysPerfMgr = null;
@@ -188,18 +190,18 @@ private SystemPerformanceManager sysPerfMgr = null;
 	}
 	
 	public void startManager()
-{
-	if (this.sysPerfMgr != null) {
-		this.sysPerfMgr.startManager();
-	}
-}
-	
-public void stopManager()
-{
-	if (this.sysPerfMgr != null) {
-		this.sysPerfMgr.stopManager();
-	}
-}
+    {
+        if (this.sysPerfManager != null) {
+            this.sysPerfManager.startManager(); // Call startManager on sysPerfManager if it's not null
+        }
+    }
+
+    public void stopManager()
+    {
+        if (this.sysPerfManager != null) {
+            this.sysPerfManager.stopManager(); // Call stopManager on sysPerfManager if it's not null
+        }
+    }
 	private void initManager()
 	{
 		ConfigUtil configUtil = ConfigUtil.getInstance();
