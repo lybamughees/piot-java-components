@@ -8,6 +8,9 @@
 
 package programmingtheiot.gda.app;
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,6 +53,7 @@ public class DeviceDataManager implements IDataMessageListener
 	private boolean enableCloudClient = false;
 	private boolean enableSmtpClient = false;
 	private boolean enablePersistenceClient = false;
+	private ScheduledExecutorService schedExecSvc = null;
 	
 	private IActuatorDataListener actuatorDataListener = null;
 	private IPubSubClient mqttClient = null;
@@ -57,12 +61,15 @@ public class DeviceDataManager implements IDataMessageListener
 	private IPersistenceClient persistenceClient = null;
 	private IRequestResponseClient smtpClient = null;
 	private CoapServerGateway coapServer = null;
+	private int pollRate = ConfigConst.DEFAULT_POLL_CYCLES;
 
-	private SystemPerformanceManager sysPerfManager = null;
+
+	private boolean isStarted = false;
 
 private boolean enableSystemPerf = false;
 
 private SystemPerformanceManager sysPerfMgr = null;
+private Runnable taskRunner = null;
 	
 	// constructors
 	
@@ -189,19 +196,26 @@ private SystemPerformanceManager sysPerfMgr = null;
 	{
 	}
 	
-	public void startManager()
-    {
-        if (this.sysPerfManager != null) {
-            this.sysPerfManager.startManager(); // Call startManager on sysPerfManager if it's not null
-        }
-    }
+	public boolean startManager() {
+		if (!this.isStarted) {
+			_Logger.info("DeviceDataManager is starting...");
 
-    public void stopManager()
-    {
-        if (this.sysPerfManager != null) {
-            this.sysPerfManager.stopManager(); // Call stopManager on sysPerfManager if it's not null
-        }
-    }
+
+			this.isStarted = true;
+		} else {
+			_Logger.info("DeviceDataManager is already started.");
+		}
+
+		return this.isStarted;
+	}
+
+	public boolean stopManager() {
+		this.isStarted = false;
+
+		_Logger.info("DeviceDataManager is stopped.");
+
+		return true;
+	}
 	private void initManager()
 	{
 		ConfigUtil configUtil = ConfigUtil.getInstance();

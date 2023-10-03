@@ -66,11 +66,13 @@ public class SystemPerformanceManager {
 		this.sysCpuUtilTask = new SystemCpuUtilTask();
 		this.sysMemUtilTask = new SystemMemUtilTask();
 		this.sysDiskUtilTask = new SystemDiskUtilTask();
-		this.taskRunner = () -> {
-			this.handleTelemetry();
-		};
+		
 		this.locationID = ConfigUtil.getInstance().getProperty(
 				ConfigConst.GATEWAY_DEVICE, ConfigConst.LOCATION_ID_PROP, ConfigConst.NOT_SET);
+
+				this.taskRunner = () -> {
+			this.handleTelemetry();
+		};
 
 	}
 
@@ -81,7 +83,7 @@ public class SystemPerformanceManager {
 		float memUtil = this.sysMemUtilTask.getTelemetryValue();
 		float diskUtil = this.sysDiskUtilTask.getTelemetryValue();
 
-		_Logger.fine(
+		_Logger.info(
 				"CPU utilization: " + cpuUtil + ", Mem utilization: " + memUtil + ", Disk utilization: " + diskUtil);
 		SystemPerformanceData spd = new SystemPerformanceData();
 		spd.setLocationID(this.locationID);

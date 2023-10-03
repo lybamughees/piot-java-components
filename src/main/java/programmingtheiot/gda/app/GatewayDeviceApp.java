@@ -90,8 +90,9 @@ public class GatewayDeviceApp
         _Logger.info("Starting GDA...");
 
         try {
-            if (this.dataMgr != null) {
+            if (this.dataMgr != null && this.sysPerfMgr !=null) {
                 this.dataMgr.startManager(); // Call startManager on data manager
+				this.sysPerfMgr.startManager();
                 _Logger.info("GDA started successfully.");
             } else {
                 _Logger.warning("Failed to start data manager!");
@@ -108,8 +109,9 @@ public class GatewayDeviceApp
         _Logger.info("Stopping GDA...");
 
         try {
-            if (this.dataMgr != null) {
+            if (this.dataMgr != null && this.sysPerfMgr!=null) {
                 this.dataMgr.stopManager(); // Call stopManager on data manager
+				this.sysPerfMgr.stopManager();
                 _Logger.log(Level.INFO, "GDA stopped successfully with exit code {0}.", code);
             } else {
                 _Logger.warning("Failed to stop data manager!");
