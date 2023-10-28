@@ -196,53 +196,75 @@ private Runnable taskRunner = null;
 	{
 	}
 	
-	public boolean startManager() {
-		if (!this.isStarted) {
-			_Logger.info("DeviceDataManager is starting...");
+	public void startManager() {
+		if (this.sysPerfMgr != null) {
+			this.sysPerfMgr.startManager();
+		}
+	
+		if (this.mqttClient != null) {
+			if (this.mqttClient.connectClient()) {
+				_Logger.info("Successfully connected MQTT client to broker.");
+	
+				// Add necessary subscriptions
+	
+				// TODO: read this from the configuration file
+				int qos = ConfigConst.DEFAULT_QOS;
+	
+				// TODO: check the return value for each and take appropriate action
+				this.mqttClient.subscribeToTopic(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, qos);
+				this.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, qos);
+				this.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, qos);
+				this.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, qos);
+			} else {
+				_Logger.severe("Failed to connect MQTT client to broker.");
+	
+				// TODO: take appropriate action
+			}
+		}
+	}
+	
 
-
-			this.isStarted = true;
+	public void stopManager()
+{
+	if (this.sysPerfMgr != null) {
+		this.sysPerfMgr.stopManager();
+	}
+	
+	if (this.mqttClient != null) {
+		// add necessary un-subscribes
+		
+		// TODO: check the return value for each and take appropriate action
+		this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE);
+		this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE);
+		this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE);
+		this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE);
+		
+		if (this.mqttClient.disconnectClient()) {
+			_Logger.info("Successfully disconnected MQTT client from broker.");
 		} else {
-			_Logger.info("DeviceDataManager is already started.");
+			_Logger.severe("Failed to disconnect MQTT client from broker.");
+			
+			// TODO: take appropriate action
 		}
-
-		return this.isStarted;
 	}
+}
+	private void initManager() {
+        ConfigUtil configUtil = ConfigUtil.getInstance();
 
-	public boolean stopManager() {
-		this.isStarted = false;
+        this.enableSystemPerf = configUtil.getBoolean(ConfigConst.GATEWAY_DEVICE, ConfigConst.ENABLE_SYSTEM_PERF_KEY);
 
-		_Logger.info("DeviceDataManager is stopped.");
+        if (this.enableSystemPerf) {
+            this.sysPerfMgr = new SystemPerformanceManager();
+            this.sysPerfMgr.setDataMessageListener(this);
+        }
 
-		return true;
-	}
-	private void initManager()
-	{
-		ConfigUtil configUtil = ConfigUtil.getInstance();
-		
-		this.enableSystemPerf =
-			configUtil.getBoolean(ConfigConst.GATEWAY_DEVICE,  ConfigConst.ENABLE_SYSTEM_PERF_KEY);
-		
-		if (this.enableSystemPerf) {
-			this.sysPerfMgr = new SystemPerformanceManager();
-			this.sysPerfMgr.setDataMessageListener(this);
-		}
-		
-		if (this.enableMqttClient) {
-			// TODO: implement this in Lab Module 7
-		}
-		
-		if (this.enableCoapServer) {
-			// TODO: implement this in Lab Module 8
-		}
-		
-		if (this.enableCloudClient) {
-			// TODO: implement this in Lab Module 10
-		}
-		
-		if (this.enablePersistenceClient) {
-			// TODO: implement this as an optional exercise in Lab Module 5
-		}
+        if (this.enableMqttClient) {
+            // Initialize and create a new instance of MqttClientConnector
+            this.mqttClient = new MqttClientConnector();
+
+            // TODO: Set other configurations and connect to MQTT broker if needed
+            // Example: this.mqttClient.setDataMessageListener(this);
+        }
 	}
 	
 	// private methods

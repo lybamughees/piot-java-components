@@ -68,7 +68,7 @@ public class MqttClientConnectorTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#connectClient()}.
 	 */
-//	@Test
+// @Test
 	public void testConnectAndDisconnect()
 	{
 		int delay = ConfigUtil.getInstance().getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE);
@@ -137,98 +137,98 @@ public class MqttClientConnectorTest
 		assertTrue(this.mqttClient.disconnectClient());
 	}
 	
-	/**
-	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#publishMessage(programmingtheiot.common.ResourceNameEnum, java.lang.String, int)}.
-	 */
-//	@Test
-	public void testPublishAndSubscribeTwoClients()
-	{
-		int qos = 0;
+// 	/**
+// 	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#publishMessage(programmingtheiot.common.ResourceNameEnum, java.lang.String, int)}.
+// 	 */
+// //	@Test
+// 	public void testPublishAndSubscribeTwoClients()
+// 	{
+// 		int qos = 0;
 		
-		IDataMessageListener listener = new MqttPublishDataMessageListener(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, true);
+// 		IDataMessageListener listener = new MqttPublishDataMessageListener(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, true);
 		
-		this.mqttClient.setDataMessageListener(listener);
+// 		this.mqttClient.setDataMessageListener(listener);
 		
-		assertTrue(this.mqttClient.connectClient());
+// 		assertTrue(this.mqttClient.connectClient());
 		
-		assertTrue(this.mqttClient.subscribeToTopic(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, qos));
-		assertTrue(this.mqttClient.subscribeToTopic(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, 0));
+// 		assertTrue(this.mqttClient.subscribeToTopic(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, qos));
+// 		assertTrue(this.mqttClient.subscribeToTopic(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, 0));
 		
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-			// ignore
-		}
+// 		try {
+// 			Thread.sleep(5000);
+// 		} catch (Exception e) {
+// 			// ignore
+// 		}
 		
-		assertTrue(this.mqttClient.publishMessage(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the GDA message payload 1.", qos));
-		assertTrue(this.mqttClient.publishMessage(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the GDA message payload 2.", qos));
-		assertTrue(this.mqttClient.publishMessage(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the GDA message payload 3.", qos));
+// 		assertTrue(this.mqttClient.publishMessage(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the GDA message payload 1.", qos));
+// 		assertTrue(this.mqttClient.publishMessage(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the GDA message payload 2.", qos));
+// 		assertTrue(this.mqttClient.publishMessage(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the GDA message payload 3.", qos));
 		
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-			// ignore
-		}
+// 		try {
+// 			Thread.sleep(5000);
+// 		} catch (Exception e) {
+// 			// ignore
+// 		}
 		
-		assertTrue(this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE));
-		assertTrue(this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE));
+// 		assertTrue(this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE));
+// 		assertTrue(this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE));
 
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-			// ignore
-		}
+// 		try {
+// 			Thread.sleep(5000);
+// 		} catch (Exception e) {
+// 			// ignore
+// 		}
 
-		assertTrue(this.mqttClient.disconnectClient());
-	}
+// 		assertTrue(this.mqttClient.disconnectClient());
+// 	}
 	
-	/**
-	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#publishMessage(programmingtheiot.common.ResourceNameEnum, java.lang.String, int)}.
-	 */
-//	@Test
-	public void testIntegrateWithCdaPublishCdaCmdTopic()
-	{
-		int qos = 1;
+// 	/**
+// 	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#publishMessage(programmingtheiot.common.ResourceNameEnum, java.lang.String, int)}.
+// 	 */
+// //	@Test
+// 	public void testIntegrateWithCdaPublishCdaCmdTopic()
+// 	{
+// 		int qos = 1;
 		
-		assertTrue(this.mqttClient.connectClient());
-		assertTrue(this.mqttClient.publishMessage(ResourceNameEnum.CDA_MGMT_STATUS_CMD_RESOURCE, "TEST: This is the CDA command payload.", qos));
+// 		assertTrue(this.mqttClient.connectClient());
+// 		assertTrue(this.mqttClient.publishMessage(ResourceNameEnum.CDA_MGMT_STATUS_CMD_RESOURCE, "TEST: This is the CDA command payload.", qos));
 		
-		try {
-			Thread.sleep(60000);
-		} catch (Exception e) {
-			// ignore
-		}
+// 		try {
+// 			Thread.sleep(60000);
+// 		} catch (Exception e) {
+// 			// ignore
+// 		}
 		
-		assertTrue(this.mqttClient.disconnectClient());
-	}
+// 		assertTrue(this.mqttClient.disconnectClient());
+// 	}
 	
-	/**
-	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#publishMessage(programmingtheiot.common.ResourceNameEnum, java.lang.String, int)}.
-	 */
-//	@Test
-	public void testIntegrateWithCdaSubscribeCdaMgmtTopic()
-	{
-		int qos = 1;
-		int delay = ConfigUtil.getInstance().getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE);
+// 	/**
+// 	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#publishMessage(programmingtheiot.common.ResourceNameEnum, java.lang.String, int)}.
+// 	 */
+// //	@Test
+// 	public void testIntegrateWithCdaSubscribeCdaMgmtTopic()
+// 	{
+// 		int qos = 1;
+// 		int delay = ConfigUtil.getInstance().getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE);
 		
-		assertTrue(this.mqttClient.connectClient());
-		assertTrue(this.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_MGMT_STATUS_MSG_RESOURCE, qos));
+// 		assertTrue(this.mqttClient.connectClient());
+// 		assertTrue(this.mqttClient.subscribeToTopic(ResourceNameEnum.CDA_MGMT_STATUS_MSG_RESOURCE, qos));
 		
-		try {
-			Thread.sleep(delay * 1000);
-		} catch (Exception e) {
-			// ignore
-		}
+// 		try {
+// 			Thread.sleep(delay * 1000);
+// 		} catch (Exception e) {
+// 			// ignore
+// 		}
 		
-		assertTrue(this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_MGMT_STATUS_MSG_RESOURCE));
+// 		assertTrue(this.mqttClient.unsubscribeFromTopic(ResourceNameEnum.CDA_MGMT_STATUS_MSG_RESOURCE));
 		
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-			// ignore
-		}
+// 		try {
+// 			Thread.sleep(5000);
+// 		} catch (Exception e) {
+// 			// ignore
+// 		}
 		
-		assertTrue(this.mqttClient.disconnectClient());
-	}
+// 		assertTrue(this.mqttClient.disconnectClient());
+// 	}
 	
 }
