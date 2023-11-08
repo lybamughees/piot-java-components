@@ -275,7 +275,7 @@ public class DeviceDataManager implements IDataMessageListener {
 			this.mqttClient.setDataMessageListener(this);
 		}
 		if (this.enableCoapServer) {
-			this.coapServer = new CoapServerGateway();
+			this.coapServer = new CoapServerGateway(null);
 		}
 	}
 

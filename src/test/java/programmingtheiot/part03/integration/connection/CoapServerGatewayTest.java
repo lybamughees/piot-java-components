@@ -74,30 +74,52 @@ public class CoapServerGatewayTest
 	 * 
 	 */
 	@Test
-public void testRunSimpleCoapServerGatewayIntegration()
-{
-	try {
-		String url = "coap://localhost:5683";
-		
-		this.csg = new CoapServerGateway(); // assumes the no-arg constructor will create all resources internally
-		this.csg.startServer();
-		
-		CoapClient clientConn = new CoapClient(url);
-		
-		Set<WebLink> wlSet = clientConn.discover();
+	public void testRunSimpleCoapServerGatewayIntegration()
+	{
+		try {
+			String url =
+				ConfigConst.DEFAULT_COAP_PROTOCOL + "://" + ConfigConst.DEFAULT_HOST + ":" + ConfigConst.DEFAULT_COAP_PORT;
 			
-		if (wlSet != null) {
-			for (WebLink wl : wlSet) {
-				_Logger.info(" --> WebLink: " + wl.getURI() + ". Attributes: " + wl.getAttributes());
+			this.csg = new CoapServerGateway(new DefaultDataMessageListener());
+			this.csg.startServer();
+			
+			Thread.sleep(5000);
+			
+			CoapClient clientConn = new CoapClient(url);
+			
+			Set<WebLink> wlSet = clientConn.discover();
+				
+			if (wlSet != null) {
+				for (WebLink wl : wlSet) {
+					_Logger.info(" --> WebLink: " + wl.getURI() + ". Attributes: " + wl.getAttributes());
+				}
 			}
+			
+			// execute some simple get requests
+			
+			/*
+			 * NOTE: Change these to suit your own environment.
+			 */
+			
+			clientConn.setURI(
+				url + "/" + ConfigConst.PRODUCT_NAME);
+			clientConn.get();
+			
+			clientConn.setURI(
+				url + "/" + ConfigConst.PRODUCT_NAME + "/" + ConfigConst.CONSTRAINED_DEVICE);
+			clientConn.get();
+			
+			clientConn.setURI(
+				url + "/" + ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE.getResourceName());
+			clientConn.get();
+			
+			// wait for 2 min's (so other app tests can run)
+			Thread.sleep(120000L);
+			
+			this.csg.stopServer();
+		} catch (Exception e) {
+			// ignore
 		}
-		
-		Thread.sleep(DEFAULT_TIMEOUT); // DEFAULT_TIMEOUT is in milliseconds - for instance, 120000 (2 minutes)
-		
-		this.csg.stopServer();
-	} catch (Exception e) {
-		// log a message!
 	}
-}
 	
 }

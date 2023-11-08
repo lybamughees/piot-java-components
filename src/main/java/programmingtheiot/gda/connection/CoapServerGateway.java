@@ -11,6 +11,7 @@ import org.eclipse.californium.core.server.resources.Resource;
 import org.eclipse.californium.core.server.resources.ResourceObserver;
 
 import programmingtheiot.common.ConfigConst;
+import programmingtheiot.common.DefaultDataMessageListener;
 import programmingtheiot.common.IDataMessageListener;
 import programmingtheiot.common.ResourceNameEnum;
 import programmingtheiot.gda.connection.handlers.GenericCoapResourceHandler;
@@ -27,7 +28,7 @@ public class CoapServerGateway {
 	private IDataMessageListener dataMsgListener = null;
 
 	// constructors
-	public CoapServerGateway() {
+	public CoapServerGateway(DefaultDataMessageListener defaultDataMessageListener) {
 		super();
 		this.dataMsgListener = dataMsgListener;
 		initServer();
