@@ -9,6 +9,9 @@ import org.eclipse.californium.core.network.Endpoint;
 import org.eclipse.californium.core.network.interceptors.MessageTracer;
 import org.eclipse.californium.core.server.resources.Resource;
 import org.eclipse.californium.core.server.resources.ResourceObserver;
+import org.eclipse.californium.core.config.CoapConfig;
+import org.eclipse.californium.elements.config.UdpConfig;
+
 
 import programmingtheiot.common.ConfigConst;
 import programmingtheiot.common.DefaultDataMessageListener;
@@ -104,10 +107,12 @@ public class CoapServerGateway {
 	}
 
 	private void initServer(ResourceNameEnum... resources) {
-		this.coapServer = new CoapServer();
+        CoapConfig.register();
+        UdpConfig.register();
+        this.coapServer = new CoapServer();
 
-		initDefaultResources();
-	}
+        initDefaultResources();
+    }
 
 	private void initDefaultResources() {
 		// initialize pre-defined resources
