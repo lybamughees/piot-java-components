@@ -26,6 +26,7 @@ import programmingtheiot.data.SensorData;
 import programmingtheiot.data.SystemPerformanceData;
 
 import programmingtheiot.gda.connection.CloudClientConnector;
+import programmingtheiot.gda.connection.CoapClientConnector;
 import programmingtheiot.gda.connection.CoapServerGateway;
 import programmingtheiot.gda.connection.IPersistenceClient;
 import programmingtheiot.gda.connection.IPubSubClient;
@@ -52,6 +53,7 @@ public class DeviceDataManager implements IDataMessageListener {
 	private boolean enableSmtpClient = false;
 	private boolean enablePersistenceClient = false;
 	private ScheduledExecutorService schedExecSvc = null;
+	private boolean enableCoapClient = true;
 
 	private IActuatorDataListener actuatorDataListener = null;
 	private IPubSubClient mqttClient = null;
@@ -87,6 +89,9 @@ public class DeviceDataManager implements IDataMessageListener {
 		this.enablePersistenceClient = configUtil.getBoolean(
 				ConfigConst.GATEWAY_DEVICE, ConfigConst.ENABLE_PERSISTENCE_CLIENT_KEY);
 
+		this.enableCoapClient = configUtil.getBoolean(
+				ConfigConst.GATEWAY_DEVICE, ConfigConst.ENABLE_COAP_CLIENT_KEY);
+
 		initManager();
 	}
 
@@ -97,6 +102,8 @@ public class DeviceDataManager implements IDataMessageListener {
 			boolean enableSmtpClient,
 			boolean enablePersistenceClient) {
 		super();
+
+		this.enableCoapClient = enableCoapClient;
 
 		initConnections();
 	}
@@ -224,6 +231,11 @@ public class DeviceDataManager implements IDataMessageListener {
 				_Logger.severe("Failed to start CoAP server. Check log file for details.");
 			}
 		}
+
+		if (this.enableCoapClient) {
+			// TODO: Start or initialize the CoAP client as needed
+			_Logger.info("CoAP client is enabled and will be started.");
+		}
 	}
 
 	public void stopManager() {
@@ -276,6 +288,15 @@ public class DeviceDataManager implements IDataMessageListener {
 		}
 		if (this.enableCoapServer) {
 			this.coapServer = new CoapServerGateway(null);
+		}
+
+		if (this.enableCoapClient) {
+			// TODO: Initialize and create a new instance of CoapClientConnector
+			// This may involve setting other configurations and connecting to the CoAP
+			// server
+			CoapClientConnector coapClient = new CoapClientConnector();
+			coapClient.setDataMessageListener(this);
+			_Logger.info("Initialized CoAP client.");
 		}
 	}
 

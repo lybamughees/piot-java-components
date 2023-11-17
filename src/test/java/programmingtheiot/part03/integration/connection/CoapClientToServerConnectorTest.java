@@ -56,7 +56,7 @@ public class CoapClientToServerConnectorTest {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		_ServerGateway = new CoapServerGateway();
+		_ServerGateway = new CoapServerGateway(null);
 
 		assertTrue(_ServerGateway.startServer());
 	}

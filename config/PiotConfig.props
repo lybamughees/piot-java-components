@@ -60,6 +60,8 @@ securePort     = 5684
 enableAuth     = False
 enableCrypt    = False
 enableConfirmedMsgs = True
+enableCoapClient=true
+
 
 #
 # GDA specific configuration information
