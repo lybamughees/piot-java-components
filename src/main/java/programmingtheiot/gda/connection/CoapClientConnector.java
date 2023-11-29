@@ -332,7 +332,7 @@ public class CoapClientConnector implements IRequestResponseClient
 	// private methods
 	public class SensorDataObserverHandler implements CoapHandler
 	{
-		private final Logger _Logger =
+		private static final Logger _Logger =
 			Logger.getLogger(SensorDataObserverHandler.class.getName());
 		private IDataMessageListener dataMsgListener;
 		

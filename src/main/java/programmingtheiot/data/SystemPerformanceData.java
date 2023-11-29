@@ -22,53 +22,55 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 	
 	
 	// private var's
-	
 	private float cpuUtil  = ConfigConst.DEFAULT_VAL;
 	private float diskUtil = ConfigConst.DEFAULT_VAL;
 	private float memUtil  = ConfigConst.DEFAULT_VAL;
     
 	// constructors
 	
-	public SystemPerformanceData()
-{
-	super();
-	
-	super.setName(ConfigConst.SYS_PERF_DATA);
-}
+	public SystemPerformanceData(){
+		
+		super();
+		
+		super.setName(ConfigConst.SYS_PERF_DATA);
+	}
 	
 	
 	// public methods
 	
 	public float getCpuUtilization()
-{
-    return this.cpuUtil;
-}
+	{
+		return this.cpuUtil;
+	}
+	
+	public float getDiskUtilization()
+	{
+		return this.diskUtil;
+	}
+	
+	public float getMemoryUtilization()
+	{
+		return this.memUtil;
+	}
+	
+	public void setCpuUtilization(float val){
+		super.updateTimeStamp();
 
-public void setCpuUtilization(float val)
-{
-    this.cpuUtil = val;
-}
+		this.cpuUtil = val;
+	}
+	
+	public void setDiskUtilization(float val){
+		super.updateTimeStamp();
 
-public float getDiskUtilization()
-{
-    return this.diskUtil;
-}
+		this.diskUtil = val;
+	}
+	
+	public void setMemoryUtilization(float val){
+		super.updateTimeStamp();
 
-public void setDiskUtilization(float val)
-{
-    this.diskUtil = val;
-}
-
-public float getMemoryUtilization()
-{
-    return this.memUtil;
-}
-
-public void setMemoryUtilization(float val)
-{
-    this.memUtil = val;
-}
-
+		this.memUtil = val;
+	}
+	
 	/**
 	 * Returns a string representation of this instance. This will invoke the base class
 	 * {@link #toString()} method, then append the output from this call.
@@ -93,15 +95,14 @@ public void setMemoryUtilization(float val)
 	/* (non-Javadoc)
 	 * @see programmingtheiot.data.BaseIotData#handleUpdateData(programmingtheiot.data.BaseIotData)
 	 */
-	protected void handleUpdateData(BaseIotData data)
-{
- if (data instanceof SystemPerformanceData) {
- SystemPerformanceData sData = (SystemPerformanceData) data;
- 
- this.setCpuUtilization(sData.getCpuUtilization());
- this.setDiskUtilization(sData.getDiskUtilization());
- this.setMemoryUtilization(sData.getMemoryUtilization());
- }
-}
+	protected void handleUpdateData(BaseIotData data){
+		if (data instanceof SystemPerformanceData) {
+			 SystemPerformanceData sData = (SystemPerformanceData) data;
+	
+			 this.setCpuUtilization(sData.getCpuUtilization());
+			 this.setDiskUtilization(sData.getDiskUtilization());
+			 this.setMemoryUtilization(sData.getMemoryUtilization());
+		}
+	}
 	
 }

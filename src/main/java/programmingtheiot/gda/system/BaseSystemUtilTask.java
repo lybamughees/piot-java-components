@@ -19,37 +19,36 @@ public abstract class BaseSystemUtilTask
 {
 	// static
 	
-	public static final Logger _Logger =
+	private static final Logger _Logger =
 		Logger.getLogger(BaseSystemUtilTask.class.getName());
 	
 	
 	// private
 	
-	
-	private String name = ConfigConst.NOT_SET;
-private int typeID = ConfigConst.DEFAULT_TYPE_ID;
+	private String name   = ConfigConst.NOT_SET;
+	private int typeID = ConfigConst.DEFAULT_TYPE_ID;
 	
 	// constructors
 	
 	public BaseSystemUtilTask(String name, int typeID)
-{
-	super();
-	
-	if (name != null) {
-		this.name = name;
+	{
+		super();
+		
+		if (name != null) {
+			this.name = name;
+		}
+		
+		this.typeID = typeID;
+		
 	}
 	
-	this.typeID = typeID;
-}
 	
 	// public methods
 	
 	public String getName()
-{
-    return this.name;
-}
-
-
+	{
+		return this.name;
+	}
 	
 	/**
 	 * Returns the type ID of the system utilization task.
@@ -57,9 +56,9 @@ private int typeID = ConfigConst.DEFAULT_TYPE_ID;
 	 * @return int
 	 */
 	public int getTypeID()
-{
-    return this.typeID;
-}
+	{
+		return this.typeID;
+	}
 	
 	/**
 	 * Template method definition. Sub-class will implement this to retrieve

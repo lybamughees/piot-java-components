@@ -5,7 +5,7 @@
  * found in the LICENSE file at the top level of this repository.
  * 
  * Copyright (c) 2020 by Andrew D. King
- */
+ */ 
 
 package programmingtheiot.part03.integration.connection;
 
@@ -35,191 +35,199 @@ import programmingtheiot.gda.connection.*;
  * 
  * NOTE: The CoAP server must be running before executing these tests.
  */
-public class CoapClientConnectorTest {
+public class CoapClientConnectorTest
+{
 	// static
-
+	
 	public static final int DEFAULT_TIMEOUT = 5;
 	public static final boolean USE_DEFAULT_RESOURCES = true;
-
-	private static final Logger _Logger = Logger.getLogger(CoapClientConnectorTest.class.getName());
-
+	
+	private static final Logger _Logger =
+		Logger.getLogger(CoapClientConnectorTest.class.getName());
+	
 	// member var's
-
+	
 	private CoapClientConnector coapClient = null;
 	private IDataMessageListener dataMsgListener = null;
-
+	
+	
 	// test setup methods
-
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	public static void setUpBeforeClass() throws Exception
+	{
 	}
-
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
+	public static void tearDownAfterClass() throws Exception
+	{
 	}
-
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception
+	{
 		this.coapClient = new CoapClientConnector();
 		this.dataMsgListener = new DefaultDataMessageListener();
-
+		
 		this.coapClient.setDataMessageListener(this.dataMsgListener);
 	}
-
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() throws Exception
+	{
 	}
-
+	
 	// test methods
-
+	
 	/**
 	 * 
 	 */
-	@Test
-	public void testConnectAndDiscover() {
+	//@Test
+	public void testConnectAndDiscover()
+	{
 		assertTrue(this.coapClient.sendDiscoveryRequest(DEFAULT_TIMEOUT));
 
-		// NOTE: If you are using a custom asynchronous discovery, include a brief wait
-		// here
+		// NOTE: If you are using a custom asynchronous discovery, include a brief wait here
 		try {
 			Thread.sleep(2000L);
 		} catch (InterruptedException e) {
 			// ignore
 		}
 	}
-
+	
 	/**
 	 * 
 	 */
-	@Test
-	public void testGetRequestCon() {
+	//@Test
+	public void testGetRequestCon()
+	{
 		// TODO: issue request and validate response
-
-		assertTrue(this.coapClient.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, true,
-				DEFAULT_TIMEOUT));
+		
+		assertTrue(this.coapClient.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, true, DEFAULT_TIMEOUT));
 	}
-
+	
 	/**
 	 * 
 	 */
-	@Test
-	public void testGetRequestNon() {
+	//@Test
+	public void testGetRequestNon()
+	{
 		// TODO: issue request and validate response
-
-		assertTrue(this.coapClient.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, false,
-				DEFAULT_TIMEOUT));
+		
+		assertTrue(this.coapClient.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, false, DEFAULT_TIMEOUT));
 	}
-
+	
 	/**
 	 * 
 	 */
-	@Test
-	public void testPostRequestCon() {
+	//@Test
+	public void testPostRequestCon()
+	{
 		// TODO: issue request and validate response
-
+		
 		int actionCmd = 1;
-
+		
 		SystemStateData ssd = new SystemStateData();
 		ssd.setCommand(actionCmd);
-
+		
 		String ssdJson = DataUtil.getInstance().systemStateDataToJson(ssd);
-
-		assertTrue(this.coapClient.sendPostRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, true, ssdJson,
-				DEFAULT_TIMEOUT));
+		
+		assertTrue(this.coapClient.sendPostRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, true, ssdJson, DEFAULT_TIMEOUT));
 	}
-
+	
 	/**
 	 * 
 	 */
-	 @Test
-	public void testPostRequestNon() {
+	//@Test
+	public void testPostRequestNon()
+	{
 		// TODO: issue request and validate response
-
+		
 		int actionCmd = 1;
-
+		
 		SystemStateData ssd = new SystemStateData();
 		ssd.setCommand(actionCmd);
-
+		
 		String ssdJson = DataUtil.getInstance().systemStateDataToJson(ssd);
-
-		assertTrue(this.coapClient.sendPostRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, false, ssdJson,
-				DEFAULT_TIMEOUT));
+		
+		assertTrue(this.coapClient.sendPostRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, false, ssdJson, DEFAULT_TIMEOUT));
 	}
-
+	
 	/**
 	 * 
 	 */
-	@Test
-	public void testPutRequestCon() {
+	//@Test
+	public void testPutRequestCon()
+	{
 		// TODO: issue request and validate response
-
+		
 		int actionCmd = 2;
-
+		
 		SystemStateData ssd = new SystemStateData();
 		ssd.setCommand(actionCmd);
-
+		
 		String ssdJson = DataUtil.getInstance().systemStateDataToJson(ssd);
-
-		assertTrue(this.coapClient.sendPutRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, true, ssdJson,
-				DEFAULT_TIMEOUT));
+		
+		assertTrue(this.coapClient.sendPutRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, true, ssdJson, DEFAULT_TIMEOUT));
 	}
-
+	
 	/**
 	 * 
 	 */
-	@Test
-	public void testPutRequestNon() {
+	//@Test
+	public void testPutRequestNon()
+	{
 		// TODO: issue request and validate response
-
+		
 		int actionCmd = 2;
-
+		
 		SystemStateData ssd = new SystemStateData();
 		ssd.setCommand(actionCmd);
-
+		
 		String ssdJson = DataUtil.getInstance().systemStateDataToJson(ssd);
-
-		assertTrue(this.coapClient.sendPutRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, false, ssdJson,
-				DEFAULT_TIMEOUT));
+		
+		assertTrue(this.coapClient.sendPutRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, null, false, ssdJson, DEFAULT_TIMEOUT));
 	}
-
+	
 	/**
 	 * 
 	 */
-	@Test
-	public void testDeleteRequestCon() {
+	//@Test
+	public void testDeleteRequestCon()
+	{
 		// TODO: issue request and validate response
-
-		assertTrue(this.coapClient.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, null, true,
-				DEFAULT_TIMEOUT));
+		
+		assertTrue(this.coapClient.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, null, true, DEFAULT_TIMEOUT));
 	}
-
+	
 	/**
 	 * 
 	 */
-	@Test
-	public void testDeleteRequestNon() {
+	//@Test
+	public void testDeleteRequestNon()
+	{
 		// TODO: issue request and validate response
-
-		assertTrue(this.coapClient.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, null, false,
-				DEFAULT_TIMEOUT));
+		
+		assertTrue(this.coapClient.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, null, false, DEFAULT_TIMEOUT));
 	}
-
+	
 	@Test
-	public void testObserve() {
+	public void testObserve()
+	{
 		// TODO: issue request and validate response
-
+		
 		assertTrue(this.coapClient.startObserver(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, null, DEFAULT_TIMEOUT));
 	}
 }

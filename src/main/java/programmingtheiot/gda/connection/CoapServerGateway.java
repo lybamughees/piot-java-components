@@ -1,20 +1,30 @@
 package programmingtheiot.gda.connection;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.californium.core.config.CoapConfig;
+import org.eclipse.californium.elements.config.UdpConfig;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
+import org.eclipse.californium.core.network.CoapEndpoint;
 import org.eclipse.californium.core.network.Endpoint;
+import org.eclipse.californium.core.network.EndpointManager;
 import org.eclipse.californium.core.network.interceptors.MessageTracer;
 import org.eclipse.californium.core.server.resources.Resource;
 import org.eclipse.californium.core.server.resources.ResourceObserver;
-import org.eclipse.californium.core.config.CoapConfig;
+import org.eclipse.californium.core.coap.CoAP.ResponseCode;
+import org.eclipse.californium.core.server.resources.CoapExchange;
+import org.eclipse.californium.core.server.resources.MyIpResource;
+import org.eclipse.californium.elements.config.Configuration;
 import org.eclipse.californium.elements.config.UdpConfig;
-
+import org.eclipse.californium.elements.util.NetworkInterfacesUtil;
 
 import programmingtheiot.common.ConfigConst;
-import programmingtheiot.common.DefaultDataMessageListener;
 import programmingtheiot.common.IDataMessageListener;
 import programmingtheiot.common.ResourceNameEnum;
 import programmingtheiot.gda.connection.handlers.GenericCoapResourceHandler;
@@ -23,6 +33,12 @@ import programmingtheiot.gda.connection.handlers.UpdateSystemPerformanceResource
 import programmingtheiot.gda.connection.handlers.UpdateTelemetryResourceHandler;
 
 public class CoapServerGateway {
+	
+	static {
+		CoapConfig.register();
+		UdpConfig.register();
+	}
+	
 	// static
 	private static final Logger _Logger = Logger.getLogger(CoapServerGateway.class.getName());
 
@@ -31,7 +47,7 @@ public class CoapServerGateway {
 	private IDataMessageListener dataMsgListener = null;
 
 	// constructors
-	public CoapServerGateway(DefaultDataMessageListener defaultDataMessageListener) {
+	public CoapServerGateway() {
 		super();
 		this.dataMsgListener = dataMsgListener;
 		initServer();
@@ -107,13 +123,40 @@ public class CoapServerGateway {
 	}
 
 	private void initServer(ResourceNameEnum... resources) {
-        CoapConfig.register();
-        UdpConfig.register();
-        this.coapServer = new CoapServer();
+		int port = Configuration.getStandard().get(CoapConfig.COAP_PORT);
+		
+		
+		this.coapServer = new CoapServer();
+		
+		/*
+		Configuration config = Configuration.getStandard();
+		CoapEndpoint.Builder builder = new CoapEndpoint.Builder();
+		builder.setInetSocketAddress(new InetSocketAddress("localhost", port));
+		builder.setConfiguration(config);
+		this.coapServer.addEndpoint(builder.build());
+		this.coapServer.add(new MyIpResource(MyIpResource.RESOURCE_NAME, true)); */
+		
+		addEndpoints(true, false, port);
+		initDefaultResources();
+	}
 
-        initDefaultResources();
-    }
-
+	
+	
+	
+	private void addEndpoints(boolean udp, boolean tcp, int port) {
+		Configuration config = Configuration.getStandard();
+		for (InetAddress addr : NetworkInterfacesUtil.getNetworkInterfaces()) {
+			InetSocketAddress bindToAddress = new InetSocketAddress(addr, port);
+			if (udp) {
+				CoapEndpoint.Builder builder = new CoapEndpoint.Builder();
+				builder.setInetSocketAddress(bindToAddress);
+				builder.setConfiguration(config);
+				this.coapServer.addEndpoint(builder.build());
+			}
+			
+		}
+	} 
+	
 	private void initDefaultResources() {
 		// initialize pre-defined resources
 		GetActuatorCommandResourceHandler getActuatorCmdResourceHandler = new GetActuatorCommandResourceHandler(
@@ -149,17 +192,22 @@ public class CoapServerGateway {
 			String[] names = endName.split("/");
 			for (String name : names) {
 				if (parent.getChild(name) == null) {
+					this.coapServer.add(new GenericCoapResourceHandler(name));
 					parent.add(new GenericCoapResourceHandler(name));
 				}
 				parent = parent.getChild(name);
 			}
+			this.coapServer.add(resourceHandler);
 			parent.add(resourceHandler);
 			return parent;
 		} else {
 			Resource res = this.coapServer.getRoot();
 			res.add(resourceHandler);
+			this.coapServer.add(resourceHandler);
 			return res;
 		}
 	}
+	
+	 
 
 }

@@ -13,62 +13,50 @@ import programmingtheiot.common.ResourceNameEnum;
 import programmingtheiot.data.DataUtil;
 import programmingtheiot.data.SystemPerformanceData;
 
-public class UpdateTelemetryResourceHandler extends CoapResource {
 
-    public UpdateTelemetryResourceHandler(String resourceName) {
-        super(resourceName);
-        // TODO Auto-generated constructor stub
-    }
-
-    private IDataMessageListener dataMsgListener = null;
-    private static final Logger _Logger =
-    Logger.getLogger(UpdateTelemetryResourceHandler.class.getName());
-
-    public void setDataMessageListener(IDataMessageListener listener) {
-        if (listener != null) {
-            this.dataMsgListener = listener;
-        }
-    }
-
-    @Override
-    public void handlePUT(CoapExchange context) {
-        // Initialize the response code with NOT_ACCEPTABLE by default
-        ResponseCode code = ResponseCode.NOT_ACCEPTABLE;
-    
-        // Accept the request, indicating it is being handled
-        context.accept();
-    
-        if (this.dataMsgListener != null) {
-            try {
-                // Extract JSON data from the request payload
-                String jsonData = new String(context.getRequestPayload());
-    
-                // Convert JSON data to a SystemPerformanceData instance
-                SystemPerformanceData sysPerfData = DataUtil.getInstance().jsonToSystemPerformanceData(jsonData);
-    
-                // TODO: You can perform additional checks here, such as checking MID or caching the previous update if needed.
-    
-                // Delegate the data handling to this.dataMsgListener
-                this.dataMsgListener.handleSystemPerformanceMessage(
-                    ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, sysPerfData);
-    
-                // Set the response code to CHANGED to indicate a successful update
-                code = ResponseCode.CHANGED;
-            } catch (Exception e) {
-                // Handle exceptions, log an error message, and set the response code to BAD_REQUEST
-                _Logger.warning("Failed to handle PUT request. Message: " + e.getMessage());
-                code = ResponseCode.BAD_REQUEST;
-            }
-        } else {
-            // Log an info message if there is no callback listener, and set the response code to CONTINUE
-            _Logger.info("No callback listener for request. Ignoring PUT.");
-            code = ResponseCode.CONTINUE;
-        }
-    
-        // Prepare a response message
-        String msg = "Update system perf data request handled: " + super.getName();
-    
-        // Respond to the request with the appropriate response code and message
-        context.respond(code, msg);
-    }
+public class UpdateTelemetryResourceHandler extends CoapResource  {
+	
+	private static final Logger _Logger =
+		Logger.getLogger(GenericCoapResourceHandler.class.getName());
+	
+	// params
+	
+	private IDataMessageListener dataMsgListener = null;
+	// constructors
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param resource Basically, the path (or topic)
+	 */
+	public UpdateTelemetryResourceHandler(ResourceNameEnum resource)
+	{
+		this(resource.getResourceName());
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param resourceName The name of the resource.
+	 */
+	public UpdateTelemetryResourceHandler(String resourceName)
+	{
+		super(resourceName);
+	}
+	
+	
+	// public methods
+	
+	@Override
+	public void handlePUT(CoapExchange context)
+	{
+		
+	}
+	
+	public void setDataMessageListener(IDataMessageListener listener){
+		if (listener != null) {
+			this.dataMsgListener = listener;
+		}
+	}
+	
 }
